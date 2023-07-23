@@ -7,10 +7,10 @@ public class Name {
     private String birth;
 
 
-    public Name(int id, String name, String date) {
+    public Name(int id, String name, String birth) {
         this.id = id;
         this.name = name;
-        this.birth = date;
+        this.birth = birth;
     }
 
     public int getId() {

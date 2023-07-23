@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 public class NameController {
-    private NameService nameService;
+    private final NameService nameService;
 
     public NameController(NameService nameService) {
         this.nameService = nameService;

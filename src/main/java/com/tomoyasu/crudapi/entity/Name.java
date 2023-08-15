@@ -6,7 +6,6 @@ public class Name {
 
     private String birth;
 
-
     public Name(int id, String name, String birth) {
         this.id = id;
         this.name = name;

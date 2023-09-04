@@ -1,4 +1,4 @@
-package com.tomoyasu.crudapi;
+package com.tomoyasu.crudapi.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {

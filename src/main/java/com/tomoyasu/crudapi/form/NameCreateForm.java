@@ -1,10 +1,8 @@
-package com.tomoyasu.crudapi;
+package com.tomoyasu.crudapi.form;
 
 
 public class NameCreateForm {
-
     private String name;
-
     private String birth;
 
     public NameCreateForm(String name, String birth) {
@@ -16,15 +14,8 @@ public class NameCreateForm {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getBirth() {
         return birth;
     }
 
-    public void setBirth(String birth) {
-        this.birth = birth;
-    }
 }

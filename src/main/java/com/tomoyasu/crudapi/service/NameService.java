@@ -1,6 +1,5 @@
 package com.tomoyasu.crudapi.service;
 
-import com.tomoyasu.crudapi.NameCreateForm;
 import com.tomoyasu.crudapi.entity.Name;
 
 import java.util.List;
@@ -10,5 +9,5 @@ public interface NameService {
 
     Name findById(int id);
 
-    Name createName(NameCreateForm nameCreateForm);
+    Name createName(String name, String birth);
 }

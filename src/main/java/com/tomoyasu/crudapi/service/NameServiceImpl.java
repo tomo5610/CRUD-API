@@ -1,8 +1,7 @@
 package com.tomoyasu.crudapi.service;
 
-import com.tomoyasu.crudapi.NameCreateForm;
-import com.tomoyasu.crudapi.ResourceNotFoundException;
 import com.tomoyasu.crudapi.entity.Name;
+import com.tomoyasu.crudapi.exception.ResourceNotFoundException;
 import com.tomoyasu.crudapi.mapper.NameMapper;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +29,9 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
-    public Name createName(NameCreateForm nameCreateForm) {
-        Name name = new Name(
-                0,
-                nameCreateForm.getName(),
-                nameCreateForm.getBirth()
-        );
-        nameMapper.insertName(name);
-        return name;
+    public Name createName(String name, String birth) {
+        Name NameData = new Name(name, birth);
+        nameMapper.createName(NameData);
+        return NameData;
     }
 }

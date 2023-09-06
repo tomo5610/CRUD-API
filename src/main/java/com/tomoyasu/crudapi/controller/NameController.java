@@ -3,7 +3,6 @@ package com.tomoyasu.crudapi.controller;
 import com.tomoyasu.crudapi.entity.Name;
 import com.tomoyasu.crudapi.form.NameCreateForm;
 import com.tomoyasu.crudapi.service.NameService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,12 +39,11 @@ public class NameController {
     }
 
     @PostMapping("/names")
-    public ResponseEntity<Name> createName(@RequestBody @Valid NameCreateForm nameCreateForm, HttpServletRequest request) {
+    public ResponseEntity<Name> createName(@RequestBody @Valid NameCreateForm nameCreateForm, UriComponentsBuilder uriBuilder) {
         Name name = nameService.createName(nameCreateForm.getName(), nameCreateForm.getBirth());
-
-        URI url = UriComponentsBuilder.fromUriString(request.getRequestURI())
-                .path("/{id}")
-                .buildAndExpand(name.getId())
+        URI url = uriBuilder
+                .path("/names/" + name.getId())
+                .build()
                 .toUri();
         return ResponseEntity.created(url).body(name);
     }

@@ -10,4 +10,8 @@ public interface NameService {
     Name findById(int id);
 
     Name createName(String name, String birth);
+
+    void updateName(int id, String name, String birth) throws Exception;
+
+    void deleteById(int id);
 }

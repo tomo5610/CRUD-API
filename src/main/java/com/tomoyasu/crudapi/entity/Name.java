@@ -3,6 +3,15 @@ package com.tomoyasu.crudapi.entity;
 public class Name {
     private int id;
     private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
+
     private String birth;
 
     public Name(int id, String name, String birth) {

@@ -34,4 +34,17 @@ public class NameServiceImpl implements NameService {
         nameMapper.createName(NameData);
         return NameData;
     }
+
+    @Override
+    public void updateName(int id, String name, String birth) {
+        Name nameUpdate = nameMapper.findById(id).orElseThrow(() -> new ResourceNotFoundException("resource not found"));
+        nameUpdate.setName(name);
+        nameUpdate.setBirth(birth);
+        nameMapper.updateName(nameUpdate);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        nameMapper.deleteById(id);
+    }
 }

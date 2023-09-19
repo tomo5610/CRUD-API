@@ -1,17 +1,10 @@
 package com.tomoyasu.crudapi.entity;
 
+import java.util.Objects;
+
 public class Name {
     private int id;
     private String name;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setBirth(String birth) {
-        this.birth = birth;
-    }
-
     private String birth;
 
     public Name(int id, String name, String birth) {
@@ -33,7 +26,30 @@ public class Name {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getBirth() {
         return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name name = (Name) o;
+        return id == name.id &&
+                Objects.equals(this.name, name.name) &&
+                Objects.equals(this.birth, name.birth);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, birth);
     }
 }

@@ -1,19 +1,20 @@
 package com.tomoyasu.crudapi.entity;
 
+import java.time.YearMonth;
 import java.util.Objects;
 
 public class Name {
     private int id;
     private String name;
-    private String birth;
+    private YearMonth birth;
 
-    public Name(int id, String name, String birth) {
+    public Name(int id, String name, YearMonth birth) {
         this.id = id;
         this.name = name;
         this.birth = birth;
     }
 
-    public Name(String name, String birth) {
+    public Name(String name, YearMonth birth) {
         this.name = name;
         this.birth = birth;
     }
@@ -30,11 +31,11 @@ public class Name {
         this.name = name;
     }
 
-    public String getBirth() {
+    public YearMonth getBirth() {
         return birth;
     }
 
-    public void setBirth(String birth) {
+    public void setBirth(YearMonth birth) {
         this.birth = birth;
     }
 

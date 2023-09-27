@@ -7,6 +7,6 @@ CREATE TABLE names (
   PRIMARY KEY(id)
 );
 
-INSERT INTO names (name,birth) VALUES ("tomoyasu",202301);
-INSERT INTO names (name,birth) VALUES ("tanaka",202302);
-INSERT INTO names (name,birth) VALUES ("yamada",202303);
+INSERT INTO names (name,birth) VALUES ("tomoyasu","2023-01");
+INSERT INTO names (name,birth) VALUES ("tanaka","2023-02");
+INSERT INTO names (name,birth) VALUES ("yamada","2023-03");

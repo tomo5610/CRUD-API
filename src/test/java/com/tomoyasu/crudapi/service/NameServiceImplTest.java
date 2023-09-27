@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,19 +29,19 @@ class NameServiceImplTest {
 
     @Test
     public void IDに紐づくユーザーが1件取得できること() throws Exception {
-        doReturn(Optional.of(new Name(1, "tomoyasu", YearMonth.of(2023, 1)))).when(nameMapper).findById(1);
+        doReturn(Optional.of(new Name(1, "tomoyasu", "202301"))).when(nameMapper).findById(1);
 
         Name actual = nameServiceImpl.findById(1);
-        assertThat(actual).isEqualTo(new Name(1, "tomoyasu", YearMonth.of(2023, 1)));
+        assertThat(actual).isEqualTo(new Name(1, "tomoyasu", "202301"));
         verify(nameMapper, times(1)).findById(1);
     }
 
     @Test
     public void 存在するユーザー情報を全て返すこと() {
         List<Name> names = List.of(
-                new Name(1, "tomoyasu", YearMonth.of(2023, 1)),
-                new Name(2, "tanaka", YearMonth.of(2023, 2)),
-                new Name(3, "yamada", YearMonth.of(2023, 3)));
+                new Name(1, "tomoyasu", "202301"),
+                new Name(2, "tanaka", "202302"),
+                new Name(3, "yamada", "202303"));
 
         doReturn(names).when(nameMapper).findAll();
 

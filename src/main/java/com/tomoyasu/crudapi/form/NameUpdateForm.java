@@ -1,12 +1,10 @@
 package com.tomoyasu.crudapi.form;
 
-import java.time.YearMonth;
-
 public class NameUpdateForm {
     private String name;
-    private YearMonth birth;
+    private String birth;
 
-    public NameUpdateForm(String name, YearMonth birth) {
+    public NameUpdateForm(String name, String birth) {
         this.name = name;
         this.birth = birth;
     }
@@ -15,7 +13,8 @@ public class NameUpdateForm {
         return name;
     }
 
-    public YearMonth getBirth() {
+    public String getBirth() {
         return birth;
+
     }
 }

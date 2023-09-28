@@ -1,18 +1,14 @@
 package com.tomoyasu.crudapi.form;
 
-import com.tomoyasu.crudapi.exception.YearMonthValid;
 import jakarta.validation.constraints.NotBlank;
-
-import java.time.YearMonth;
 
 public class NameCreateForm {
     @NotBlank
     private String name;
-    
-    @YearMonthValid(allowEmpty = false)
-    private YearMonth birth;
+    @NotBlank
+    private String birth;
 
-    public NameCreateForm(String name, YearMonth birth) {
+    public NameCreateForm(String name, String birth) {
         this.name = name;
         this.birth = birth;
     }
@@ -21,7 +17,8 @@ public class NameCreateForm {
         return name;
     }
 
-    public YearMonth getBirth() {
+    public String getBirth() {
         return birth;
     }
+
 }

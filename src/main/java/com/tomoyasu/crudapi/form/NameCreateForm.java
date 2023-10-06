@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.YearMonth;
 
 public class NameCreateForm {
-    @NotBlank
+    @NotBlank(message = "Name cannot be blank")
     private String name;
-    
-    @YearMonthValid(allowEmpty = false)
+
+    @YearMonthValid(allowEmpty = false, message = "Invalid YearMonth format")
     private YearMonth birth;
 
     public NameCreateForm(String name, YearMonth birth) {

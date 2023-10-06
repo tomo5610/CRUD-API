@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.DateTimeException;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -43,13 +45,31 @@ public class NameController {
     }
 
     @PostMapping("/names")
-    public ResponseEntity<Name> createName(@RequestBody @Valid NameCreateForm nameCreateForm, UriComponentsBuilder uriBuilder) {
-        Name name = nameService.createName(nameCreateForm.getName(), nameCreateForm.getBirth());
+    public ResponseEntity<?> createName(@RequestBody @Valid NameCreateForm nameCreateForm, UriComponentsBuilder uriBuilder) {
+        YearMonth birth = nameCreateForm.getBirth();
+
+        if (birth == null) {
+            return ResponseEntity.badRequest().body("Birth is required");
+        }
+
+        if (!isValidYearMonth(birth)) {
+            return ResponseEntity.badRequest().body("Invalid YearMonth format. Please use 'yyyy-MM' format.");
+        }
+
+        Name name = nameService.createName(nameCreateForm.getName(), birth);
         URI url = uriBuilder
                 .path("/names/" + name.getId())
                 .build()
                 .toUri();
         return ResponseEntity.created(url).body(name);
+    }
+
+    private boolean isValidYearMonth(YearMonth yearMonth) {
+        try {
+            return yearMonth != null;
+        } catch (DateTimeException e) {
+            return false;
+        }
     }
 
     @PatchMapping("names/{id}")

@@ -3,27 +3,25 @@ package com.tomoyasu.crudapi.exception;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.time.DateTimeException;
 import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 
-public class YearMonthValidator implements ConstraintValidator<YearMonthValid, YearMonth> {
-    private boolean allowEmpty;
+public class YearMonthValidator implements ConstraintValidator<YearMonthValid, String> {
 
     @Override
     public void initialize(YearMonthValid constraintAnnotation) {
-        this.allowEmpty = constraintAnnotation.allowEmpty();
     }
 
     @Override
-    public boolean isValid(YearMonth value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
-            return allowEmpty;
+            return true;
         }
 
         try {
-            YearMonth.now().with(value);
+            YearMonth.parse(value);
             return true;
-        } catch (DateTimeException e) {
+        } catch (DateTimeParseException e) {
             return false;
         }
     }

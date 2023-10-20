@@ -17,6 +17,4 @@ public @interface YearMonthValid {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    boolean allowEmpty() default false;
 }

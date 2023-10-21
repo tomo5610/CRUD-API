@@ -5,6 +5,7 @@ import com.tomoyasu.crudapi.exception.ResourceNotFoundException;
 import com.tomoyasu.crudapi.mapper.NameMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +30,14 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
-    public Name createName(String name, String birth) {
+    public Name createName(String name, YearMonth birth) {
         Name NameData = new Name(name, birth);
         nameMapper.createName(NameData);
         return NameData;
     }
 
     @Override
-    public void updateName(int id, String name, String birth) {
+    public void updateName(int id, String name, YearMonth birth) {
         Name nameUpdate = nameMapper.findById(id).orElseThrow(() -> new ResourceNotFoundException("resource not found"));
         nameUpdate.setName(name);
         nameUpdate.setBirth(birth);

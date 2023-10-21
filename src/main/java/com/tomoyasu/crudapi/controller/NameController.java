@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,8 @@ public class NameController {
 
     @PostMapping("/names")
     public ResponseEntity<Name> createName(@RequestBody @Valid NameCreateForm nameCreateForm, UriComponentsBuilder uriBuilder) {
-        Name name = nameService.createName(nameCreateForm.getName(), nameCreateForm.getBirth());
+        YearMonth birth = YearMonth.parse(nameCreateForm.getBirth());
+        Name name = nameService.createName(nameCreateForm.getName(), birth);
         URI url = uriBuilder
                 .path("/names/" + name.getId())
                 .build()
@@ -53,8 +55,9 @@ public class NameController {
     }
 
     @PatchMapping("names/{id}")
-    public ResponseEntity<Map<String, String>> updateName(@PathVariable int id, @RequestBody NameUpdateForm nameUpdateForm) throws Exception {
-        nameService.updateName(id, nameUpdateForm.getName(), nameUpdateForm.getBirth());
+    public ResponseEntity<Map<String, String>> updateName(@PathVariable int id, @RequestBody @Valid NameUpdateForm nameUpdateForm) throws Exception {
+        YearMonth birth = YearMonth.parse(nameUpdateForm.getBirth());
+        nameService.updateName(id, nameUpdateForm.getName(), birth);
         return ResponseEntity.ok(Map.of("message", "successfully updated"));
     }
 

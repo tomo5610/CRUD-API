@@ -15,6 +15,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -60,5 +62,39 @@ class NameServiceImplTest {
         ).isInstanceOfSatisfying(
                 ResourceNotFoundException.class, e -> assertThat(e.getMessage()).isEqualTo("resource not found")
         );
+    }
+
+    @Test
+    public void ユーザーが１件登録されること() throws Exception {
+        Name name = new Name("tomoyasu", YearMonth.of(2023, 1));
+        doNothing().when(nameMapper).createName(name);
+
+        nameServiceImpl.createName("tomoyasu", YearMonth.of(2023, 1));
+        verify(nameMapper, times(1)).createName(name);
+    }
+
+    @Test
+    public void 存在するユーザーのIDを指定したときにユーザーを更新できること() throws Exception {
+        Name updateName = new Name(1, "tomoyasu", YearMonth.of(2023, 1));
+        doReturn(Optional.of(updateName)).when(nameMapper).findById(1);
+
+        nameServiceImpl.updateName(1, "tomoyasu", YearMonth.of(2023, 2));
+        verify(nameMapper, times(1)).updateName(updateName);
+    }
+
+    @Test
+    public void 更新指定したIDが存在しないとき例外を返すこと() {
+        doReturn(Optional.empty()).when(nameMapper).findById(99);
+        assertThrows(ResourceNotFoundException.class, () -> nameServiceImpl.findById(99));
+        verify(nameMapper, times(1)).findById(99);
+    }
+
+    @Test
+    public void 存在するユーザーのIDを指定したときにユーザーを削除できること() throws Exception {
+        doNothing().when(nameMapper).deleteById(1);
+
+        nameServiceImpl.deleteById(1);
+
+        verify(nameMapper, times(1)).deleteById(1);
     }
 }

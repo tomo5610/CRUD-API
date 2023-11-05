@@ -13,11 +13,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -82,16 +87,49 @@ public class NameRestApiIntegrationTest {
     @ExpectedDataSet(value = "datasets/insert_names.yml", ignoreCols = "id")
     @Transactional
     void 名前を新規登録できること() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/names")
-                        .contentType(MediaType.APPLICATION_JSON).content("""
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/names")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
                                 {
                                     "name": "higashi",
                                     "birth": "2023-01"
                                 }
                                 """))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andReturn();
+
+        String locationHeader = result.getResponse().getHeader("Location");
+        assertThat(locationHeader).isNotBlank();
+
+        int actualId = extractIdFromLocationHeader(locationHeader);
+
+        String expectedLocation = "/names/" + actualId;
+
+        assertThat(locationHeader).endsWith(expectedLocation);
+
+        String responseBody = result.getResponse().getContentAsString();
+
+        JSONAssert.assertEquals("""
+                {
+                    "name": "higashi",
+                    "birth": "2023-01"
+                }
+                """, responseBody, JSONCompareMode.LENIENT);
     }
 
+    private int extractIdFromLocationHeader(String locationHeader) {
+        try {
+            URL url = new URL(locationHeader);
+
+            String path = url.getPath();
+            String[] segments = path.split("/");
+            String lastSegment = segments[segments.length - 1];
+
+            return Integer.parseInt(lastSegment);
+        } catch (MalformedURLException | NumberFormatException e) {
+            throw new RuntimeException("Failed to extract id from Location header: " + locationHeader, e);
+        }
+    }
 
     @Test
     @DataSet(value = "datasets/names.yml")
@@ -160,7 +198,18 @@ public class NameRestApiIntegrationTest {
     @DataSet(value = "datasets/names.yml")
     @Transactional
     void 存在しないIDを削除した際のレスポンスが404を返すこと() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/names/99"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+        String response = mockMvc.perform(MockMvcRequestBuilders.delete("/names/99")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+        JSONAssert.assertEquals("""
+                    {
+                       "error": "Not Found",
+                       "message": "resource not found",
+                       "status": "404"
+                    }
+                """, response, new CustomComparator(JSONCompareMode.LENIENT,
+                new Customization("timestamp", (o1, o2) -> true)));
     }
 }

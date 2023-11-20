@@ -8,7 +8,7 @@ import java.util.List;
 public interface NameService {
     List<Name> findAll();
 
-    Name findById(int id);
+    Name findbyId(int id);
 
     Name createName(String name, YearMonth birth);
 

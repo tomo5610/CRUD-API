@@ -8,9 +8,9 @@ import java.util.List;
 public interface NameService {
     List<Name> findAll();
 
-    Name findbyId(int id);
+    Name find_ById(int id);
 
-    Name createName(String name, YearMonth birth);
+    Name create_Name(String name, YearMonth birth);
 
     void updateName(int id, String name, YearMonth birth) throws Exception;
 

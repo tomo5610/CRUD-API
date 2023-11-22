@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -91,10 +92,13 @@ class NameServiceImplTest {
 
     @Test
     public void 存在するユーザーのIDを指定したときにユーザーを削除できること() throws Exception {
+        doReturn(Optional.of(new Name(1, "tomoyasu", YearMonth.of(2023, 1)))).when(nameMapper).findById(1);
+
         doNothing().when(nameMapper).deleteById(1);
 
-        nameServiceImpl.deleteById(1);
-
+        assertDoesNotThrow(() -> nameServiceImpl.deleteById(1));
+        
+        verify(nameMapper, times(1)).findById(1);
         verify(nameMapper, times(1)).deleteById(1);
     }
 }
